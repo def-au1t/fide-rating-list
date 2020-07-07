@@ -21,6 +21,7 @@
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "express-timeout-handler": "^2.2.0",
+    "mongodb": "^3.5.9",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.0"
   },
