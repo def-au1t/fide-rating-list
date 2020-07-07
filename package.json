@@ -9,7 +9,8 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
-    "start": "node main.js"
+    "start": "node main.js",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
