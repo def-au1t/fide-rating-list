@@ -3,6 +3,7 @@ require("dotenv-flow").config();
 const DEFAULT_PORT = 5000;
 const DEFAULT_REQUEST_TIMEOUT = 100000;
 
+const path = require('path');
 const fide_ratings = require("./fide_ratings");
 const utils = require("./utils");
 const express = require("express");
@@ -11,6 +12,7 @@ const app = express();
 const MongoClient = require("mongodb").MongoClient;
 const fetch = require("node-fetch");
 const basicAuth = require("express-basic-auth");
+const cron = require("node-cron");
 
 const port = process.env.PORT || DEFAULT_PORT;
 const request_timeout = parseInt(process.env.RESPONSE_TIMEOUT_MS, 10) || DEFAULT_REQUEST_TIMEOUT;
@@ -97,9 +99,8 @@ app.get("/rating-list", (req, res) => {
 app.get("/rating-list/update", basicAuth({
     users: { "admin": process.env.UPDATE_PASSWORD },
     challenge: true,
-    realm: "Podaj hasło, aby ręcznie zaktualizować",
+    realm: "Podaj haslo:",
 }), async (req, res) => {
-    // eslint-disable-next-line max-len
     let ids = [];
     let replacements = [];
     const result = [];
@@ -131,8 +132,8 @@ app.get("/rating-list/update", basicAuth({
 
     MongoClient.connect(process.env.CONNECTION_STRING)
         .then(async (client) => {
-            await client.db("silesia").collection("players").deleteMany({ });
-            client.db("silesia").collection("players").insertMany(result)
+            await client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION_NAME).deleteMany({ });
+            client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION_NAME).insertMany(result)
                 .then((result) => {
                     console.log("Zaktualizowano pomyślnie");
                     res.send(result);
@@ -159,3 +160,13 @@ const playerEndpointsErrorHandler = (err, res) => {
         "Failed to fetch player information",
     ));
 };
+
+
+cron.schedule("0 3 * * *", async() => {
+    let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
+    console.log(authorization);
+   await fetch('http://127.0.0.1:' + (process.env.PORT || 5000) + '/rating-list/update', {
+       method: "Get",
+       headers: {'Authorization': "Basic " + authorization,}
+   })
+});
