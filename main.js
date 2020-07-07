@@ -1,6 +1,6 @@
 require("dotenv-flow").config();
 
-const DEFAULT_PORT = 5000;
+const DEFAULT_PORT = 3000;
 const DEFAULT_REQUEST_TIMEOUT = 100000;
 
 const path = require('path');
@@ -165,7 +165,7 @@ const playerEndpointsErrorHandler = (err, res) => {
 cron.schedule("0 3 * * *", async() => {
     let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
     console.log(authorization);
-   await fetch('http://127.0.0.1:' + (process.env.PORT || 5000) + '/rating-list/update', {
+   await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list/update', {
        method: "Get",
        headers: {'Authorization': "Basic " + authorization,}
    })
