@@ -1,0 +1,31 @@
+{
+  "name": "fidescrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "engines": {
+    "node": "10.16.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint .",
+    "start": "node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "dotenv-flow": "^3.1.0",
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "express-timeout-handler": "^2.2.0",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "eslint-plugin-jest": "^22.17.0",
+    "jest": "^24.9.0",
+    "mongodb": "^3.5.9"
+  }
+}

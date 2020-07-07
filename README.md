@@ -1,0 +1,2 @@
+# fide-rating-list
+ 
