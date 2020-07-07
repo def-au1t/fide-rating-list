@@ -1,6 +1,6 @@
 require("dotenv-flow").config();
 
-const DEFAULT_PORT = 3000;
+const DEFAULT_PORT = 80;
 const DEFAULT_REQUEST_TIMEOUT = 100000;
 
 const path = require('path');
