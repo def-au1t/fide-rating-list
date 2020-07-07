@@ -4,6 +4,7 @@ Simple app to generate and automatically update FIDE rating lists.
 
 ## Backend: 
 Made in NodeJS with ExpressJS and MongoDB database. Because FIDE does not provide API, server is based on: https://github.com/xRuiAlves/fide-ratings-scraper/
+
 Server gets and reads given config file (by `FIDE_IDS` variable in `.env` file) and provides the following addidtional endpoints:
 
 * `/rating-list/update` - Protected by basic HTTP Auth. Username is `admin` and password is set in `.env` file (`UPDATE_PASSWORD`). If authorized, connects to database and refreshes current players' rating data. Returns result from database query in JSON. This endpoint is also requested automatically at 3 a.m. every day.
