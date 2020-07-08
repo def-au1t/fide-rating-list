@@ -115,6 +115,8 @@ app.get("/rating-list/update", basicAuth({
                 data.name = data.name.replace(replacements[j][0], replacements[j][1]);
             }
             data.date = new Date().toLocaleString("pl-PL", {
+                minute: "2-digit",
+                second: "2-digit",
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
@@ -169,4 +171,13 @@ cron.schedule("0 3 * * *", async() => {
        method: "Get",
        headers: {'Authorization': "Basic " + authorization,}
    })
+});
+
+cron.schedule("*/10 * * * * *", async() => {
+    let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
+    console.log("Update: " + authorization);
+    await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list/update', {
+        method: "Get",
+        headers: {'Authorization': "Basic " + authorization,}
+    })
 });
