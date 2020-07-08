@@ -114,9 +114,10 @@ app.get("/rating-list/update", basicAuth({
             for (let j = 0; j < replacements.length; j++) {
                 data.name = data.name.replace(replacements[j][0], replacements[j][1]);
             }
-            data.date = new Date().toLocaleString("pl-PL", {
+            data.date = new Date().toLocaleDateString("pl-PL", {
                 minute: "2-digit",
                 second: "2-digit",
+                hour: "2-digit",
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
@@ -164,7 +165,7 @@ const playerEndpointsErrorHandler = (err, res) => {
 };
 
 
-cron.schedule("0 3 * * *", async() => {
+cron.schedule("30 10 * * *", async() => {
     let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
     console.log(authorization);
    await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list/update', {
@@ -173,11 +174,10 @@ cron.schedule("0 3 * * *", async() => {
    })
 });
 
-cron.schedule("*/10 * * * * *", async() => {
+cron.schedule(" */10 * * * *", async() => {
     let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
     console.log("Update: " + authorization);
-    await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list/update', {
-        method: "Get",
-        headers: {'Authorization': "Basic " + authorization,}
+    await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list', {
+        method: "Get"
     })
 });
