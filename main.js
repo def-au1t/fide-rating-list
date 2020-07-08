@@ -12,7 +12,6 @@ const app = express();
 const MongoClient = require("mongodb").MongoClient;
 const fetch = require("node-fetch");
 const basicAuth = require("express-basic-auth");
-const cron = require("node-cron");
 
 const port = process.env.PORT || DEFAULT_PORT;
 const request_timeout = parseInt(process.env.RESPONSE_TIMEOUT_MS, 10) || DEFAULT_REQUEST_TIMEOUT;
@@ -114,10 +113,7 @@ app.get("/rating-list/update", basicAuth({
             for (let j = 0; j < replacements.length; j++) {
                 data.name = data.name.replace(replacements[j][0], replacements[j][1]);
             }
-            data.date = new Date().toLocaleDateString("pl-PL", {
-                minute: "2-digit",
-                second: "2-digit",
-                hour: "2-digit",
+            data.date = new Date().toLocaleDateString("en-GB", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
@@ -163,21 +159,3 @@ const playerEndpointsErrorHandler = (err, res) => {
         "Failed to fetch player information",
     ));
 };
-
-
-cron.schedule("30 10 * * *", async() => {
-    let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
-    console.log(authorization);
-   await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list/update', {
-       method: "Get",
-       headers: {'Authorization': "Basic " + authorization,}
-   })
-});
-
-cron.schedule(" */10 * * * *", async() => {
-    let authorization = Buffer.from("admin:"+ process.env.UPDATE_PASSWORD).toString('base64');
-    console.log("Update: " + authorization);
-    await fetch('http://127.0.0.1:' + (process.env.PORT || DEFAULT_PORT) + '/rating-list', {
-        method: "Get"
-    })
-});
