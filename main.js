@@ -113,7 +113,7 @@ app.get("/rating-list/update", basicAuth({
             for (let j = 0; j < replacements.length; j++) {
                 data.name = data.name.replace(replacements[j][0], replacements[j][1]);
             }
-            data.date = new Date().toLocaleDateString("en-GB", {
+            data.date = new Date().toLocaleDateString("pl-PL", {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
@@ -135,7 +135,7 @@ app.get("/rating-list/update", basicAuth({
             client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION_NAME).insertMany(result)
                 .then((result) => {
                     console.log("Zaktualizowano pomyślnie");
-                    res.send(result);
+                    res.send(result.result.ok.toString());
                 })
                 .catch((error) => res.send(error.toString()));
 
