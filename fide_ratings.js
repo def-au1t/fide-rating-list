@@ -92,11 +92,12 @@ const getPlayerElo = async (fide_num) => {
 
 const getPlayerFullInfo = async (fide_num) => {
     const $ = await fetchProfilePage(fide_num);
-
+    const player_history = await getPlayerHistory(fide_num)
     return {
         ...parsePersonalDataFromProfilePage($),
         ...parseEloFromProfilePage($),
         ...parseRankFromProfilePage($),
+        player_history
     };
 };
 

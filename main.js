@@ -107,24 +107,53 @@ app.get("/rating-list/update", basicAuth({
         .then((r) =>  r.json())
         .then((r) => { ids = r.ids; replacements = r.replace });
 
+    const date = new Date();
+    const dateStr = date.toLocaleDateString("pl-PL", {day: "2-digit"})
+        +'.'+date.toLocaleDateString("pl-PL", {month: "2-digit"})
+        +'.'+date.toLocaleDateString("pl-PL", {year: "numeric"});
+
     for (let i = 0; i < ids.length; i++) {
         fide_ratings.getPlayerFullInfo(ids[i]).then((data) => {
             data.id = ids[i];
+            // Name correction
             for (let j = 0; j < replacements.length; j++) {
                 data.name = data.name.replace(replacements[j][0], replacements[j][1]);
             }
-            data.date = new Date().toLocaleDateString("pl-PL", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-            });
+            data.name = data.name.replace(',', '');
+            // Checking rating changes.
+
+            let changes = [0,0,0];
+            if(data.player_history && data.player_history[0] && data.player_history[1]){
+                let current = [-1, -1, -1]
+                let previous = [-1, -1, -1]
+                current[0] = parseInt(data.player_history[0].standard)
+                current[1] = parseInt(data.player_history[0].rapid)
+                current[2] = parseInt(data.player_history[0].blitz)
+
+                previous[0] = parseInt(data.player_history[1].standard)
+                previous[1] = parseInt(data.player_history[1].rapid)
+                previous[2] = parseInt(data.player_history[1].blitz)
+                for(let k=0; k<3; k++){
+                    if(isNaN(current[k]) || isNaN(previous[k])) changes[k] = undefined
+                    if(current[k] > previous[k]) changes[k] = 1
+                    else if(current[k] < previous[k]) changes[k] = -1
+                }
+            }
+            data.changes = changes
+
+            if(data.rapid_elo === "Notrated") data.rapid_elo = ""
+            if(data.standard_elo === "Notrated") data.standard_elo = ""
+            if(data.blitz_elo === "Notrated") data.blitz_elo = ""
+
+            //Adding date
+            data.date = dateStr;
             console.log(`${i + 1}: ${data.name}`);
             result.push(data);
 
         });
     }
     let counter = 0;
-    while (result.length < ids.length || counter > 200) {
+    while (result.length < ids.length || counter > 1000) {
         await new Promise((r) => setTimeout(r, 100));
         counter++;
     }
