@@ -11,7 +11,7 @@ Server gets and reads given config file (by `FIDE_IDS` variable in `.env` file) 
 * `/rating-list` - Gets rating data from database in JSON file.
 
 ## Frontend:
-Very simple frontend, because whole app is just a table. Made in ReactJS with react-bootstrap library.
+Very simple frontend, because whole app is just a table. Made in ReactJS with react Material UI library.
 
 ## Deploy
 
