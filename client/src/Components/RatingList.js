@@ -114,25 +114,6 @@ export class RatingList extends React.Component {
 
                     onRowClick={(event, rowData, togglePanel) => togglePanel()}
                 />
-                    {/*<TableContainer>*/}
-                    {/*    <Table>*/}
-                    {/*        <TableHead>*/}
-                    {/*        <TableRow>*/}
-                    {/*            <TableCell>Lp.</TableCell>*/}
-                    {/*            <TableCell>Imię i nazwisko</TableCell>*/}
-                    {/*            <TableCell>Standard</TableCell>*/}
-                    {/*            <TableCell>Rapid</TableCell>*/}
-                    {/*            <TableCell>Blitz</TableCell>*/}
-                    {/*        </TableRow>*/}
-                    {/*        </TableHead>*/}
-                    {/*        <tbody>*/}
-                    {/*        {this.state.players.sort((a, b) => b.standard_elo - a.standard_elo).map((p, idx) =>*/}
-                    {/*            <PlayerElement index={idx+1} player={p} key={p.id}></PlayerElement>*/}
-
-                    {/*        )}*/}
-                    {/*        </tbody>*/}
-                    {/*    </Table>*/}
-                    {/*</TableContainer>*/}
             </>
         )
     }

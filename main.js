@@ -87,9 +87,12 @@ app.get("/rating-list", (req, res) => {
         .then((client) => {
             client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION_NAME).find().toArray()
                 .then((result) => {
+                    client.close();
                     res.json(result);
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => {
+                    client.close();
+				            console.error(error)});
 
         });
 
@@ -164,9 +167,13 @@ app.get("/rating-list/update", basicAuth({
             client.db(process.env.DB_NAME).collection(process.env.DB_COLLECTION_NAME).insertMany(result)
                 .then((result) => {
                     console.log("Zaktualizowano pomyślnie");
+                    client.close();
                     res.send(result.result.ok.toString());
                 })
-                .catch((error) => res.send(error.toString()));
+                .catch((error) => {
+                    client.close();
+				        res.send(error.toString())
+				});
 
         });
 
