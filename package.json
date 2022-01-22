@@ -21,7 +21,7 @@
     "express-basic-auth": "^1.2.0",
     "express-timeout-handler": "^2.2.0",
     "mongodb": "^3.5.9",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^3.1.1"
   },
   "devDependencies": {
     "eslint-plugin-jest": "^22.17.0",
