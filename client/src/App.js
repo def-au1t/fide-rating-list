@@ -1,6 +1,6 @@
-import React from 'react';
-import './App.css';
-import {RatingList} from "./Components/RatingList";
+import React from "react";
+import "./App.css";
+import RatingList from "./Components/RatingList";
 
 function App() {
   return (
