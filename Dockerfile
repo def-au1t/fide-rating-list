@@ -20,4 +20,4 @@ CMD [ "npm", "start" ]
 # Copy the rest of your app's source code from your host to your image filesystem.
 COPY . .
 
-RUN cd client && npm install --network=host && npm run build
+RUN cd client && npm install --force --network=host && npm run build
