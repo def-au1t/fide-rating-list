@@ -75,6 +75,16 @@ async function refreshData() {
       if (data.standard_elo === "Notrated") data.standard_elo = "";
       if (data.blitz_elo === "Notrated") data.blitz_elo = "";
 
+      if (data.rapid_elo === "" && data.player_history?.[0]?.rapid) {
+        data.rapid_elo = data.player_history[0].rapid;
+      }
+      if (data.standard_elo === "" && data.player_history?.[0]?.standard) {
+        data.standard_elo = data.player_history[0].standard;
+      }
+      if (data.blitz_elo === "" && data.player_history?.[0]?.blitz) {
+        data.blitz_elo = data.player_history[0].blitz;
+      }
+
       //Adding date
       data.date = dateStr;
       result.push(data);
@@ -197,7 +207,7 @@ app.get("/rating-list", async (req, res) => {
 app.get(
   "/rating-list/update",
   basicAuth({
-    users: { admin: process.env.UPDATE_PASSWORD },
+    users: { admin: process.env.UPDATE_PASSWORD ?? "admin" },
     challenge: true,
     realm: "Podaj haslo:",
   }),
