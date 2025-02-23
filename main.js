@@ -39,56 +39,61 @@ async function refreshData() {
     date.toLocaleDateString("pl-PL", { year: "numeric" });
 
   for (let i = 0; i < ids.length; i++) {
-    fide_ratings.getPlayerFullInfo(ids[i]).then((data) => {
-      data.id = ids[i];
-      // Name correction
-      for (let j = 0; j < replacements.length; j++) {
-        data.name = data.name.replace(replacements[j][0], replacements[j][1]);
-      }
-      data.name = data.name.replace(",", "");
-      // Checking rating changes.
-
-      let changes = [0, 0, 0];
-      if (
-        data.player_history &&
-        data.player_history[0] &&
-        data.player_history[1]
-      ) {
-        let current = [-1, -1, -1];
-        let previous = [-1, -1, -1];
-        current[0] = parseInt(data.player_history[0].standard);
-        current[1] = parseInt(data.player_history[0].rapid);
-        current[2] = parseInt(data.player_history[0].blitz);
-
-        previous[0] = parseInt(data.player_history[1].standard);
-        previous[1] = parseInt(data.player_history[1].rapid);
-        previous[2] = parseInt(data.player_history[1].blitz);
-        for (let k = 0; k < 3; k++) {
-          if (isNaN(current[k]) || isNaN(previous[k])) changes[k] = undefined;
-          if (current[k] > previous[k]) changes[k] = 1;
-          else if (current[k] < previous[k]) changes[k] = -1;
+    fide_ratings
+      .getPlayerFullInfo(ids[i])
+      .then((data) => {
+        data.id = ids[i];
+        // Name correction
+        for (let j = 0; j < replacements.length; j++) {
+          data.name = data.name.replace(replacements[j][0], replacements[j][1]);
         }
-      }
-      data.changes = changes;
+        data.name = data.name.replace(",", "");
+        // Checking rating changes.
 
-      if (data.rapid_elo === "Notrated") data.rapid_elo = "";
-      if (data.standard_elo === "Notrated") data.standard_elo = "";
-      if (data.blitz_elo === "Notrated") data.blitz_elo = "";
+        let changes = [0, 0, 0];
+        if (
+          data.player_history &&
+          data.player_history[0] &&
+          data.player_history[1]
+        ) {
+          let current = [-1, -1, -1];
+          let previous = [-1, -1, -1];
+          current[0] = parseInt(data.player_history[0].standard);
+          current[1] = parseInt(data.player_history[0].rapid);
+          current[2] = parseInt(data.player_history[0].blitz);
 
-      if (data.rapid_elo === "" && data.player_history?.[0]?.rapid) {
-        data.rapid_elo = data.player_history[0].rapid;
-      }
-      if (data.standard_elo === "" && data.player_history?.[0]?.standard) {
-        data.standard_elo = data.player_history[0].standard;
-      }
-      if (data.blitz_elo === "" && data.player_history?.[0]?.blitz) {
-        data.blitz_elo = data.player_history[0].blitz;
-      }
+          previous[0] = parseInt(data.player_history[1].standard);
+          previous[1] = parseInt(data.player_history[1].rapid);
+          previous[2] = parseInt(data.player_history[1].blitz);
+          for (let k = 0; k < 3; k++) {
+            if (isNaN(current[k]) || isNaN(previous[k])) changes[k] = undefined;
+            if (current[k] > previous[k]) changes[k] = 1;
+            else if (current[k] < previous[k]) changes[k] = -1;
+          }
+        }
+        data.changes = changes;
 
-      //Adding date
-      data.date = dateStr;
-      result.push(data);
-    });
+        if (data.rapid_elo === "Notrated") data.rapid_elo = "";
+        if (data.standard_elo === "Notrated") data.standard_elo = "";
+        if (data.blitz_elo === "Notrated") data.blitz_elo = "";
+
+        if (data.rapid_elo === "" && data.player_history?.[0]?.rapid) {
+          data.rapid_elo = data.player_history[0].rapid;
+        }
+        if (data.standard_elo === "" && data.player_history?.[0]?.standard) {
+          data.standard_elo = data.player_history[0].standard;
+        }
+        if (data.blitz_elo === "" && data.player_history?.[0]?.blitz) {
+          data.blitz_elo = data.player_history[0].blitz;
+        }
+
+        //Adding date
+        data.date = dateStr;
+        result.push(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
   let counter = 0;
   while (result.length < ids.length || counter > 1000) {
@@ -105,17 +110,17 @@ async function refreshData() {
   return "OK";
 }
 
-cron.schedule(
-  "0 0 2 * * *",
-  async () => {
-    console.log("Fetching data");
-    const res = await refreshData();
-    console.log(res);
-  },
-  {
-    runOnInit: true,
-  }
-);
+// cron.schedule(
+//   "0 0 2 * * *",
+//   async () => {
+//     console.log("Fetching data");
+//     const res = await refreshData();
+//     console.log(res);
+//   },
+//   {
+//     runOnInit: false,
+//   }
+// );
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
