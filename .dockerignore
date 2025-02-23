@@ -1,0 +1,25 @@
+# Dependencies
+**/node_modules
+
+# Optional npm cache directory
+.npm
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment Variables
+.env
+
+# Build output
+**/dist
+**/build
+
+# Docker files
+Dockerfile
+.Dockerignore
+
+# Version control
+.git
+.gitignore

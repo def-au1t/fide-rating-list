@@ -110,17 +110,15 @@ async function refreshData() {
   return "OK";
 }
 
-// cron.schedule(
-//   "0 0 2 * * *",
-//   async () => {
-//     console.log("Fetching data");
-//     const res = await refreshData();
-//     console.log(res);
-//   },
-//   {
-//     runOnInit: false,
-//   }
-// );
+cron.schedule(
+  "0 0 2 * * *",
+  async () => {
+    await refreshData();
+  },
+  {
+    runOnInit: true,
+  }
+);
 
 app.use(express.static(path.join(__dirname, "client/build")));
 
